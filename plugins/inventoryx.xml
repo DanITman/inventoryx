@@ -1,13 +1,13 @@
 <Plugin>
   <Name>InventoryX</Name>
   <Overview>See what is using your disk space. InventoryX scans your array, pools and shares and shows the result as a treemap, with a file list, file-kind totals, the largest files and fast search by name. Scans run in the background on the server and the last scan is kept across reboots. A port of Disk Inventory X.</Overview>
-  <PluginURL>https://raw.githubusercontent.com/@OWNER@/inventoryx/main/inventoryx.plg</PluginURL>
-  <PluginAuthor>@OWNER@</PluginAuthor>
-  <Support>https://github.com/@OWNER@/inventoryx/issues</Support>
-  <Project>https://github.com/@OWNER@/inventoryx</Project>
-  <ReadMe>https://raw.githubusercontent.com/@OWNER@/inventoryx/main/README.md</ReadMe>
+  <PluginURL>https://raw.githubusercontent.com/DanITman/inventoryx/main/inventoryx.plg</PluginURL>
+  <PluginAuthor>DanITman</PluginAuthor>
+  <Support>https://github.com/DanITman/inventoryx/issues</Support>
+  <Project>https://github.com/DanITman/inventoryx</Project>
+  <ReadMe>https://raw.githubusercontent.com/DanITman/inventoryx/main/README.md</ReadMe>
   <Category>Tools:System</Category>
   <MinVer>7.0.0</MinVer>
-  <Icon>https://raw.githubusercontent.com/@OWNER@/inventoryx/main/icon.svg</Icon>
+  <Icon>https://raw.githubusercontent.com/DanITman/inventoryx/main/icon.svg</Icon>
   <License>GPLv3</License>
 </Plugin>

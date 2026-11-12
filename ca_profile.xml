@@ -2,6 +2,6 @@
   <Profile>
     InventoryX: a disk usage treemap for Unraid. See what is using the space on your array, pools and shares, find the largest files, and search by name. A port of Disk Inventory X.
   </Profile>
-  <Icon>https://raw.githubusercontent.com/@OWNER@/inventoryx/main/icon.svg</Icon>
-  <WebPage>https://github.com/@OWNER@/inventoryx</WebPage>
+  <Icon>https://raw.githubusercontent.com/DanITman/inventoryx/main/icon.svg</Icon>
+  <WebPage>https://github.com/DanITman/inventoryx</WebPage>
 </CommunityApplications>

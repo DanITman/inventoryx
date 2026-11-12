@@ -29,7 +29,7 @@ Hard links are counted once, other filesystems are not entered, and totals match
 In the Unraid web UI: **Plugins → Install Plugin**, paste this URL and press Install.
 
 ```
-https://raw.githubusercontent.com/@OWNER@/inventoryx/main/inventoryx.plg
+https://raw.githubusercontent.com/DanITman/inventoryx/main/inventoryx.plg
 ```
 
 Then open **Tools → InventoryX**. Settings are under **Settings → User Utilities → InventoryX**.
