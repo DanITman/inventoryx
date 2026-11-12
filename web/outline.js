@@ -205,6 +205,29 @@ class Outline {
     this.scrollTo(item);
   }
 
+  /// Takes a deleted item out of the tree in place: open folders stay open and the
+  /// scroll position stays put. `chain` is the ids from the scan root down to the deleted
+  /// item; the folders above it are re-read so their sizes and counts are current.
+  async removeItem(chain, fetchNode) {
+    if (!this.root || chain[0] !== this.root.node.id) return;
+    const above = [this.root];
+    for (let i = 1; i < chain.length - 1; i++) {
+      const next = above[above.length - 1].kids.find(k => k.node.id === chain[i]);
+      if (!next) break;
+      above.push(next);
+    }
+    const gone = chain[chain.length - 1];
+    // Only when the folder that held it is loaded is there a row to take out.
+    if (above.length === chain.length - 1) {
+      const parent = above[above.length - 1];
+      parent.kids = parent.kids.filter(k => k.node.id !== gone);
+    }
+    if (this.selected === gone) this.selected = null;
+    const fresh = await Promise.all(above.map(it => fetchNode(it.node.id).catch(() => null)));
+    above.forEach((it, i) => { if (fresh[i]) it.node = fresh[i]; });
+    this.flatten();
+  }
+
   clearSelection() {
     this.selected = null;
     this.render();

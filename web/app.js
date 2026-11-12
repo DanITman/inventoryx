@@ -490,14 +490,14 @@ async function askDelete() {
 }
 
 async function afterDelete() {
-  const parent = S.chain.length > 1 ? S.chain[S.chain.length - 2] : 0;
+  const chain = S.chain.slice();
+  const parent = chain.length > 1 ? chain[chain.length - 2] : 0;
   S.sel = null;
   S.chain = [];
-  S.highlight = null;
   // If the view was inside what was deleted, step out to the folder that held it.
   try { await api('node', { id: S.zoom }); } catch { S.zoom = parent; }
-  const root = await api('node', { id: 0 });
-  await outline.setRoot(root.node);
+  // The file tree keeps its open folders and its place; only the deleted row goes.
+  await outline.removeItem(chain, id => api('node', { id }).then(info => info.node));
   await poll(true);
   await Promise.all([setCrumbs(), loadMap(), loadStats()]);
   await select(parent, 'toolbar');
