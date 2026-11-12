@@ -10,4 +10,9 @@
   <MinVer>7.0.0</MinVer>
   <Icon>https://raw.githubusercontent.com/DanITman/inventoryx/main/icon.svg</Icon>
   <License>GPLv3</License>
+  <Screenshot>https://raw.githubusercontent.com/DanITman/inventoryx/main/screenshots/overview.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/DanITman/inventoryx/main/screenshots/file-kinds.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/DanITman/inventoryx/main/screenshots/largest-files.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/DanITman/inventoryx/main/screenshots/search.png</Screenshot>
+  <Screenshot>https://raw.githubusercontent.com/DanITman/inventoryx/main/screenshots/settings.png</Screenshot>
 </Plugin>
