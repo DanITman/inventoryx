@@ -167,7 +167,7 @@ input:focus-visible, .btn:focus-visible, .outline:focus-visible { outline: 2px s
 .dim { color: var(--muted); }
 .swatch { flex: 0 0 12px; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0, 0, 0, 0.25); }
 .swatch.folder { border-radius: 2px 5px 2px 2px; }
-.twisty { flex: 0 0 14px; width: 14px; text-align: center; color: var(--muted); cursor: pointer; user-select: none; font-size: 10px; }
+.twisty { flex: 0 0 14px; width: 14px; text-align: center; color: var(--muted); cursor: pointer; user-select: none; font: 600 14px/1 ui-monospace, Menlo, Consolas, monospace; }
 .row.selected .twisty { color: inherit; }
 .row.more { color: var(--accent); cursor: pointer; }
 .row.head { position: sticky; top: 0; z-index: 2; background: var(--panel-2); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--line); }

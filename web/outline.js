@@ -129,7 +129,7 @@ class Outline {
     const { node, depth } = row.item;
     if (this.selected === node.id) el.classList.add('selected');
     el.style.paddingLeft = 8 + depth * 14 + 'px';
-    span('twisty', node.dir && node.children ? (row.item.expanded ? '▾' : '▸') : '');
+    span('twisty', node.dir && node.children ? (row.item.expanded ? '−' : '+') : '');
     const sw = span('swatch' + (node.dir ? ' folder' : ''));
     sw.style.background = this.opts.kindColor(node.dir ? 0 : node.kind);
     const name = span('name', node.name);
