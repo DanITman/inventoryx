@@ -275,10 +275,13 @@ async function openScan(scan) {
   requestAnimationFrame(loadMap);
 }
 
+const NO_TRASH = 'Unraid has no trash. This will be gone for good and cannot be undone.';
+
 function updateNotice() {
   const s = S.scan;
   if (!s) return;
   const lines = [];
+  if (s.zfs) lines.push('This scan includes ZFS, which InventoryX has not been tested on. Sizes and free space may be wrong, and snapshots are not counted.');
   const n = s.unreadable;
   if (n) lines.push(`${fmtCount(n)} folder${n === 1 ? '' : 's'} could not be read and ${n === 1 ? 'is' : 'are'} not counted.`);
   const age = Date.now() / 1000 - s.finished;
@@ -480,6 +483,7 @@ async function askDelete() {
         + (check.paths.length > 1 ? `, on ${check.paths.length} disks` : '')
       : fmtSize(check.bytes);
     $('del-warn').hidden = false;
+    $('del-warn').textContent = NO_TRASH + (S.scan && S.scan.zfs ? ' This is on ZFS, which InventoryX has not been tested on.' : '');
     $('del-typed').hidden = !check.typed;
     $('del-typed-reason').textContent = check.typed_reason || '';
     go.hidden = false;

@@ -26,6 +26,11 @@ to Linux, packaged as an Unraid plugin.
 
 Hard links are counted once, other filesystems are not entered, and totals match `du`.
 
+**ZFS is untested.** InventoryX was built and tested on XFS array disks and a btrfs pool. It
+is written to scan ZFS pools too (child datasets are included, snapshots are skipped), but
+that has never been run on a real ZFS pool. Sizes and free space may be wrong there, and
+InventoryX says so on any scan that includes ZFS. Reports are welcome.
+
 ## How you use it
 
 Open **Tools → InventoryX**, pick what to scan, and you get three panes: the file tree on the

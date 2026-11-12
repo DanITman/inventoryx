@@ -381,6 +381,12 @@ fn statvfs(path: &[u8]) -> Option<(u64, u64)> {
 }
 
 /// Every mount point on this machine (empty where the kernel's table cannot be read).
+/// Whether any of `paths` is on a filesystem of type `fs` (as named in the mount table).
+pub fn any_on_filesystem<'a>(paths: impl Iterator<Item = &'a [u8]>, fs: &str) -> bool {
+    let policy = MountPolicy::load();
+    paths.into_iter().any(|p| policy.fs_of(p).1 == fs)
+}
+
 pub fn mount_points() -> Vec<Vec<u8>> { MountPolicy::load().mounts.into_keys().collect() }
 
 /// Total and available bytes of the filesystem holding `path`.
@@ -786,6 +792,10 @@ mod tests {
         let disk1 = p.fs_of(b"/mnt/disk1");
         let rootfs = p.fs_of(b"/");
         assert_eq!(cache.1, "btrfs");
+        // the filesystem type is that of the deepest mount holding the path
+        assert_eq!(p.fs_of(b"/mnt/tank/data/films").1, "zfs");
+        assert_eq!(p.fs_of(b"/mnt/tankard").1, "rootfs");
+        assert_eq!(p.fs_of(b"/mnt/disk1/films").1, "xfs");
         // btrfs subvolume: different device, not a mount point, inside the same mount
         assert!(p.may_enter(b"/mnt/cache/appdata/subvol", &cache));
         // mounts inside the pool that are something else

@@ -25,6 +25,8 @@ pub struct Loaded {
     pub from_disk: bool,
     /// Something was deleted through InventoryX since the scan.
     pub has_removals: bool,
+    /// Part of the scan is on ZFS, which InventoryX has not been tested on.
+    pub zfs: bool,
 }
 
 /// Where the finished scan is saved so it survives a restart.
@@ -348,7 +350,8 @@ impl App {
         let colors = kinds::palette(&order, index.kinds.count());
         let id = index.finished.duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
         let has_removals = index.nodes.iter().any(|n| n.is_removed());
-        Loaded { index, colors, id, target, from_disk: false, has_removals }
+        let zfs = scan::any_on_filesystem(index.sources.iter().map(|s| s.path.as_slice()), "zfs");
+        Loaded { index, colors, id, target, from_disk: false, has_removals, zfs }
     }
 
     /// Starts a scan in the background. Fails if one is already running.
@@ -444,7 +447,7 @@ impl App {
                 "physical": root.physical, "unreadable": ix.unreadable,
                 "finished": l.id / 1000, "duration_ms": ix.duration.as_millis() as u64,
                 "memory": ix.memory_bytes(), "fs_total": ix.fs_total, "fs_free": ix.fs_free,
-                "other": ix.other_space(), "from_disk": l.from_disk,
+                "other": ix.other_space(), "from_disk": l.from_disk, "zfs": l.zfs,
                 "saved_to": self.saved.lock().unwrap().clone().ok().flatten(),
                 "save_error": self.saved.lock().unwrap().clone().err(),
                 "sources": ix.sources.iter().map(|s| s.label.clone()).collect::<Vec<_>>(),
