@@ -1,0 +1,74 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE PLUGIN [
+<!ENTITY name "inventoryx">
+<!ENTITY owner "@OWNER@">
+<!ENTITY author "&owner;">
+<!ENTITY version "@VERSION@">
+<!ENTITY launch "Tools/InventoryX">
+<!ENTITY repo "https://github.com/&owner;/inventoryx">
+<!ENTITY pluginURL "https://raw.githubusercontent.com/&owner;/inventoryx/main/&name;.plg">
+<!ENTITY bundle "&name;-&version;.tgz">
+<!ENTITY md5 "@MD5@">
+]>
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" support="&repo;/issues" icon="pie-chart" min="7.0.0">
+<CHANGES>
+### @VERSION@
+- First version: scan the array, pools, shares or any folder; treemap, file outline, file kinds, largest files and search.
+- Progress with time remaining; scans run in the background on the server.
+- The last scan is saved and reloaded after a reboot.
+- Deleting is available but off by default, with guards for the flash drive, the OS, mount points and the Docker and VM images.
+</CHANGES>
+
+<!-- The program, pages and scripts. Kept on the flash drive so the plugin survives a reboot. -->
+<FILE Name="/boot/config/plugins/&name;/&bundle;">
+<URL>&repo;/releases/download/&version;/&bundle;</URL>
+<MD5>&md5;</MD5>
+</FILE>
+
+<FILE Run="/bin/bash">
+<INLINE>
+if [ -x /usr/local/emhttp/plugins/inventoryx/scripts/stop ]; then
+  /usr/local/emhttp/plugins/inventoryx/scripts/stop
+else
+  pkill -x inventoryx
+fi
+sleep 1
+
+# Replace InventoryX's own web UI files.
+mkdir -p /usr/local/emhttp/plugins/inventoryx
+rm -rf /usr/local/emhttp/plugins/inventoryx/*
+
+# Remove bundles of other versions from the flash drive.
+for old in /boot/config/plugins/inventoryx/inventoryx-*.tgz; do
+  [ -e "$old" ] || continue
+  [ "$old" = "/boot/config/plugins/inventoryx/&bundle;" ] || rm -f "$old"
+done
+
+tar -xzf /boot/config/plugins/inventoryx/&bundle; -C /usr/local/emhttp/plugins/inventoryx || exit 1
+chmod 755 /usr/local/emhttp/plugins/inventoryx/inventoryx /usr/local/emhttp/plugins/inventoryx/scripts/start /usr/local/emhttp/plugins/inventoryx/scripts/stop
+/usr/local/emhttp/plugins/inventoryx/scripts/start
+
+echo ""
+echo "-----------------------------------------------------------"
+echo " InventoryX &version; has been installed."
+echo " Open it from Tools, InventoryX."
+echo "-----------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+/usr/local/emhttp/plugins/inventoryx/scripts/stop
+rm -f /var/run/inventoryx.sock /var/run/inventoryx.log
+rm -rf /usr/local/emhttp/plugins/inventoryx
+rm -rf /boot/config/plugins/inventoryx
+
+echo ""
+echo "-----------------------------------------------------------"
+echo " InventoryX has been removed."
+echo "-----------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+</PLUGIN>

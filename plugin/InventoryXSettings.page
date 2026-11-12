@@ -1,0 +1,69 @@
+Menu="Utilities"
+Title="InventoryX"
+Icon="pie-chart"
+Tag="pie-chart"
+---
+<?php
+/* InventoryX settings. GPL-3.0-or-later. */
+$ix_cfg = parse_plugin_cfg("inventoryx");
+$ix_running = trim((string)shell_exec("pidof inventoryx")) !== "";
+$ix_gb = htmlspecialchars($ix_cfg['TYPED_DELETE_GB'] ?? '10');
+$ix_allow = ($ix_cfg['ALLOW_PROTECTED'] ?? 'no') === 'yes';
+$ix_del = ($ix_cfg['DELETE_ENABLED'] ?? 'no') === 'yes';
+$ix_dir = htmlspecialchars($ix_cfg['INDEX_DIR'] ?? 'auto');
+?>
+<style>
+.ix-note { max-width: 760px; margin: 0 0 14px; padding: 10px 14px; border-left: 4px solid #e0862b; background: rgba(224,134,43,0.12); }
+.ix-adv { max-width: 760px; margin: 18px 0; }
+.ix-adv summary { cursor: pointer; font-weight: bold; }
+.ix-adv .ix-warn { color: #c0392b; font-weight: bold; }
+</style>
+
+<form markdown="1" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="inventoryx/inventoryx.cfg">
+
+_(Status)_:
+: <?=$ix_running ? 'Running' : 'Not running'?> &nbsp; <a href="/Tools/InventoryX">Open InventoryX</a>
+
+_(Keep the last scan in)_:
+: <input type="text" name="INDEX_DIR" value="<?=$ix_dir?>" placeholder="auto" spellcheck="false">
+
+> The finished scan is saved so InventoryX opens straight into it after a reboot, without scanning again.
+>
+> **auto** keeps it in an `inventoryx` folder inside the `appdata` share of a pool. Enter a folder path to keep it
+> somewhere else, or **off** to keep it in memory only. It is never written to the flash drive.
+> A change takes effect the next time InventoryX starts.
+
+_(Deleting from InventoryX)_:
+: <select name="DELETE_ENABLED">
+  <option value="no"<?=$ix_del ? '' : ' selected'?>>Off</option>
+  <option value="yes"<?=$ix_del ? ' selected' : ''?>>On</option>
+  </select>
+
+> Off by default. When on, a Delete button appears in InventoryX for the selected file or folder.
+
+<p class="ix-note"><strong>Unraid has no trash.</strong> Anything deleted from InventoryX is gone for good. Every delete asks for confirmation first and shows the full path, size and number of files. If anything in it changed since the scan, the delete is refused until you refresh. Items scanned through <code>/mnt/user</code> by typing a folder path cannot be deleted; scan the share, disk or pool from the start screen instead.</p>
+
+_(Ask to type DELETE for anything larger than)_:
+: <input type="number" name="TYPED_DELETE_GB" min="0" max="1000" step="1" value="<?=$ix_gb?>" class="narrow"> GB
+
+> Smaller items get an ordinary confirmation showing the path, size and number of files.
+> Whole shares and the appdata folder always require typing DELETE, whatever their size.
+>
+> The flash drive, the operating system and the disk and pool mount points can never be deleted from InventoryX.
+
+<details class="ix-adv">
+<summary>Advanced</summary>
+<p>The Docker image and the VM (libvirt) image are protected and cannot be deleted from InventoryX.</p>
+<p>
+<select name="ALLOW_PROTECTED">
+<option value="no"<?=$ix_allow ? '' : ' selected'?>>Keep protected files protected (recommended)</option>
+<option value="yes"<?=$ix_allow ? ' selected' : ''?>>Allow deletion of protected files</option>
+</select>
+</p>
+<p class="ix-warn">Not recommended. Deleting the Docker image removes every container's installed image; deleting the VM image removes every VM definition. Even when allowed, these always require typing DELETE.</p>
+</details>
+
+&nbsp;
+: <input type="submit" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()">
+</form>

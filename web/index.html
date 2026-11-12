@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InventoryX</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script>window.IX_CSRF = "";</script>
+</head>
+<body>
+
+<section id="start" class="view" hidden>
+  <div class="start-inner">
+    <header class="start-head">
+      <h1>InventoryX</h1>
+      <p>See what is using your disk space.</p>
+      <button id="back-to-scan" class="btn" hidden>Back to current scan</button>
+    </header>
+    <div id="targets"></div>
+    <form id="path-form" class="path-form">
+      <label for="path-input">Any folder</label>
+      <input id="path-input" type="text" placeholder="/mnt/user/Media/Movies" autocomplete="off" spellcheck="false">
+      <button class="btn" type="submit">Scan</button>
+    </form>
+    <p id="start-error" class="error" hidden></p>
+  </div>
+</section>
+
+<section id="scanning" class="view" hidden>
+  <div class="scan-box">
+    <h2 id="scan-title">Scanning…</h2>
+    <p class="scan-note"><strong>You can close this page.</strong> The scan keeps running on the server; come back any time to see its progress or the finished result.</p>
+    <div class="bar"><div id="scan-bar" class="bar-fill indeterminate"></div></div>
+    <p id="scan-eta" class="scan-eta"></p>
+    <dl class="scan-numbers">
+      <div><dt>Files</dt><dd id="scan-files">0</dd></div>
+      <div><dt>Folders</dt><dd id="scan-dirs">0</dd></div>
+      <div><dt>Size</dt><dd id="scan-bytes">0</dd></div>
+      <div><dt>Time</dt><dd id="scan-time">0 s</dd></div>
+    </dl>
+    <div id="scan-sources" class="scan-sources"></div>
+    <p id="scan-current" class="path"></p>
+    <button id="scan-cancel" class="btn">Cancel</button>
+  </div>
+</section>
+
+<section id="doc" class="view" hidden>
+  <header class="toolbar">
+    <button id="tb-volumes" class="btn" title="Choose something else to scan">Volumes</button>
+    <span class="sep"></span>
+    <button id="tb-zoom-out" class="btn" title="Zoom out to the enclosing folder">Zoom Out</button>
+    <button id="tb-zoom-in" class="btn" title="Zoom into the selected folder">Zoom In</button>
+    <button id="tb-parent" class="btn" title="Select the enclosing folder">Select Parent</button>
+    <span class="sep"></span>
+    <button id="tb-refresh" class="btn" title="Scan again">Refresh</button>
+    <button id="tb-copy" class="btn" title="Copy the selected item's path">Copy Path</button>
+    <button id="tb-browse" class="btn" title="Show in the Unraid file manager" hidden>Show in File Manager</button>
+    <button id="tb-delete" class="btn danger" title="Delete the selected item permanently" hidden>Delete…</button>
+    <span class="sep"></span>
+    <label class="check" title="Size on disk instead of file length"><input id="opt-physical" type="checkbox"> Size on disk</label>
+    <label class="check"><input id="opt-free" type="checkbox"> Free space</label>
+    <label class="check"><input id="opt-other" type="checkbox"> Other space</label>
+    <span class="grow"></span>
+    <div class="search">
+      <input id="search" type="search" placeholder="Find files…" autocomplete="off" spellcheck="false">
+      <div id="search-results" class="search-results" hidden></div>
+    </div>
+    <button id="tb-inspector" class="btn" title="Show or hide the inspector">Inspector</button>
+  </header>
+  <nav id="crumbs" class="crumbs"></nav>
+  <p id="notice" class="notice" hidden></p>
+  <main class="panes">
+    <section id="outline" class="outline" tabindex="0"></section>
+    <div id="split" class="split"></div>
+    <section id="map" class="map">
+      <canvas id="map-canvas"></canvas>
+      <canvas id="map-overlay"></canvas>
+      <div id="map-empty" class="empty" hidden>Nothing to show here.</div>
+      <div id="tip" class="tip" hidden></div>
+    </section>
+    <aside id="inspector" class="inspector">
+      <div class="tabs">
+        <button id="tab-kinds" class="tab active">File Kinds</button>
+        <button id="tab-largest" class="tab">Largest Files</button>
+      </div>
+      <div id="kinds-list" class="list"></div>
+      <div id="largest-list" class="list" hidden></div>
+    </aside>
+  </main>
+  <footer class="status">
+    <span id="status-sel" class="path"></span>
+    <span class="grow"></span>
+    <span id="status-scan"></span>
+  </footer>
+</section>
+
+<dialog id="del-dialog" class="dialog">
+  <h2 id="del-title">Delete permanently?</h2>
+  <p id="del-name" class="del-name"></p>
+  <ul id="del-paths" class="del-paths path"></ul>
+  <p id="del-size"></p>
+  <p id="del-warn" class="del-warn">Unraid has no trash. This will be gone for good and cannot be undone.</p>
+  <div id="del-typed" hidden>
+    <p id="del-typed-reason"></p>
+    <label for="del-input">Type DELETE to confirm</label>
+    <input id="del-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+  </div>
+  <p id="del-error" class="error" hidden></p>
+  <div class="dialog-buttons">
+    <button id="del-cancel" class="btn" type="button">Cancel</button>
+    <button id="del-go" class="btn danger solid" type="button" disabled>Delete permanently</button>
+  </div>
+</dialog>
+
+<script src="treemap.js"></script>
+<script src="outline.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

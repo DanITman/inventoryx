@@ -1,0 +1,18 @@
+[package]
+name = "inventoryx"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+description = "Disk usage treemap for Unraid, a port of Disk Inventory X"
+
+[dependencies]
+libc = "0.2"
+memchr = "2"
+serde_json = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

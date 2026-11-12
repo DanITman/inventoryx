@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="g" cx="0.35" cy="0.3" r="0.9">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.45"/>
+      <stop offset="0.6" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.35"/>
+    </radialGradient>
+    <clipPath id="c"><rect x="8" y="8" width="240" height="240" rx="44"/></clipPath>
+  </defs>
+  <g clip-path="url(#c)">
+    <rect x="8" y="8" width="240" height="240" fill="#202020"/>
+    <g stroke="#202020" stroke-width="3">
+      <rect x="8" y="8" width="132" height="150" fill="#3366ff"/><rect x="8" y="8" width="132" height="150" fill="url(#g)"/>
+      <rect x="140" y="8" width="108" height="92" fill="#ff4040"/><rect x="140" y="8" width="108" height="92" fill="url(#g)"/>
+      <rect x="140" y="100" width="62" height="58" fill="#40d94d"/><rect x="140" y="100" width="62" height="58" fill="url(#g)"/>
+      <rect x="202" y="100" width="46" height="58" fill="#ffd926"/><rect x="202" y="100" width="46" height="58" fill="url(#g)"/>
+      <rect x="8" y="158" width="88" height="90" fill="#e64de6"/><rect x="8" y="158" width="88" height="90" fill="url(#g)"/>
+      <rect x="96" y="158" width="80" height="52" fill="#1ad9e6"/><rect x="96" y="158" width="80" height="52" fill="url(#g)"/>
+      <rect x="96" y="210" width="44" height="38" fill="#ff8c1a"/><rect x="96" y="210" width="44" height="38" fill="url(#g)"/>
+      <rect x="140" y="210" width="36" height="38" fill="#8c99ff"/><rect x="140" y="210" width="36" height="38" fill="url(#g)"/>
+      <rect x="176" y="158" width="72" height="90" fill="#99ff99"/><rect x="176" y="158" width="72" height="90" fill="url(#g)"/>
+    </g>
+  </g>
+</svg>

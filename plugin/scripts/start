@@ -1,0 +1,13 @@
+#!/bin/bash
+# Starts the InventoryX program. It listens on a Unix socket only; the web UI reaches it
+# through api.php, behind the Unraid login.
+DIR=/usr/local/emhttp/plugins/inventoryx
+SOCK=/var/run/inventoryx.sock
+pidof inventoryx >/dev/null && exit 0
+# Where the finished scan is kept: auto (appdata on a pool), off, or a folder.
+# The settings file is read, never run as shell code.
+CFG=/boot/config/plugins/inventoryx/inventoryx.cfg
+INDEX_DIR=$(sed -n 's/^INDEX_DIR="\(.*\)"[[:space:]]*$/\1/p' "$CFG" 2>/dev/null | tail -n 1)
+case "$INDEX_DIR" in auto|off|/*) ;; *) INDEX_DIR=auto ;; esac
+rm -f "$SOCK"
+nohup "$DIR/inventoryx" serve --socket "$SOCK" --index-dir "$INDEX_DIR" >/var/run/inventoryx.log 2>&1 </dev/null &

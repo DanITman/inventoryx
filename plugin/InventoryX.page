@@ -1,0 +1,14 @@
+Menu="UNRAID-OS"
+Title="InventoryX"
+Icon="pie-chart"
+Tag="pie-chart"
+---
+<?php
+/* InventoryX — disk usage treemap. GPL-3.0-or-later. */
+?>
+<style>
+#inventoryx-frame { width: 100%; height: calc(100vh - 230px); min-height: 480px; border: 1px solid rgba(128,128,128,0.35); border-radius: 6px; }
+#inventoryx-bar { margin: 0 0 8px; }
+</style>
+<p id="inventoryx-bar"><a href="/plugins/inventoryx/api.php/" target="_blank">Open InventoryX in its own tab</a></p>
+<iframe id="inventoryx-frame" src="/plugins/inventoryx/api.php/" title="InventoryX"></iframe>
