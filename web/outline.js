@@ -28,6 +28,15 @@ class Outline {
     el.addEventListener('scroll', () => this.render());
     this.body.addEventListener('click', e => this.click(e, false));
     this.body.addEventListener('dblclick', e => this.click(e, true));
+    this.body.addEventListener('contextmenu', e => {
+      const el = e.target.closest('.row');
+      const row = el && this.rows[+el.dataset.i];
+      if (!row || !row.item || !this.opts.onContext) return;
+      e.preventDefault();
+      this.selected = row.item.node.id;
+      this.render();
+      this.opts.onContext(row.item.node, e);
+    });
     el.addEventListener('keydown', e => this.key(e));
     new ResizeObserver(() => this.render()).observe(el);
   }

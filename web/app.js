@@ -250,6 +250,7 @@ const outline = new Outline($('outline'), {
   fetchChildren: (id, offset, limit) => api('children', { node: id, offset, limit }),
   onSelect: node => select(node.id, 'outline'),
   onOpen: node => { if (node.dir) zoomTo(node.id); },
+  onContext: (node, e) => showMenu(e.clientX, e.clientY, node.id, 'outline'),
   sizeText: n => fmtSize(nodeSize(n)),
   kindName, kindColor,
 });
@@ -390,6 +391,43 @@ async function select(id, from) {
   drawOverlay();
   updateStatusBar();
   updateButtons();
+}
+
+// ---------- right-click menu ----------
+
+function hideMenu() { $('ctx').hidden = true; }
+
+/// Selects the item, then offers the toolbar's actions for it where the pointer is.
+async function showMenu(x, y, id, from) {
+  hideMenu();
+  if (id >= OTHER_NODE) return;
+  try { await select(id, from); } catch { return; }
+  const menu = $('ctx');
+  menu.textContent = '';
+  const add = (label, button, cls) => {
+    if (button.hidden) return;
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.disabled = button.disabled;
+    b.setAttribute('role', 'menuitem');
+    if (cls) b.className = cls;
+    // Every entry presses the toolbar button, so it follows exactly the same path;
+    // Delete still opens the confirmation and nothing is removed from this menu.
+    b.addEventListener('click', () => { hideMenu(); button.click(); });
+    menu.appendChild(b);
+  };
+  add('Zoom In', $('tb-zoom-in'));
+  add('Select Parent', $('tb-parent'));
+  add('Copy Path', $('tb-copy'));
+  add('Show in File Manager', $('tb-browse'));
+  if (!$('tb-delete').hidden) {
+    menu.appendChild(document.createElement('hr'));
+    add('Delete…', $('tb-delete'), 'danger');
+  }
+  menu.hidden = false;
+  const r = menu.getBoundingClientRect();
+  menu.style.left = Math.max(4, Math.min(x, window.innerWidth - r.width - 4)) + 'px';
+  menu.style.top = Math.max(4, Math.min(y, window.innerHeight - r.height - 4)) + 'px';
 }
 
 // ---------- deleting ----------
@@ -723,6 +761,15 @@ function init() {
   overlay.addEventListener('mouseleave', () => { S.hoverCell = -1; tip.hidden = true; drawOverlay(); });
   overlay.addEventListener('click', e => { const c = cellAt(e); if (c >= 0) select(map.node[c], 'map'); });
   overlay.addEventListener('dblclick', () => { const t = zoomTarget(); if (t != null) zoomTo(t); });
+  overlay.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    const c = cellAt(e);
+    if (c >= 0) showMenu(e.clientX, e.clientY, map.node[c], 'map');
+  });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('#ctx')) hideMenu(); });
+  window.addEventListener('blur', hideMenu);
+  window.addEventListener('resize', hideMenu);
+  $('outline').addEventListener('scroll', hideMenu);
 
   let resizeTimer = null;
   new ResizeObserver(() => { clearTimeout(resizeTimer); resizeTimer = setTimeout(loadMap, 150); }).observe($('map'));
@@ -750,7 +797,7 @@ function init() {
   $('search').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 120); });
   $('search').addEventListener('focus', () => { if ($('search').value.trim()) runSearch(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { $('search-results').hidden = true; $('search').blur(); }
+    if (e.key === 'Escape') { hideMenu(); $('search-results').hidden = true; $('search').blur(); }
     if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName) && !$('doc').hidden) {
       e.preventDefault();
       $('search').focus();

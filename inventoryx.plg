@@ -3,16 +3,16 @@
 <!ENTITY name "inventoryx">
 <!ENTITY owner "@OWNER@">
 <!ENTITY author "&owner;">
-<!ENTITY version "2026.11.12a">
+<!ENTITY version "2026.11.12b">
 <!ENTITY launch "Tools/InventoryX">
 <!ENTITY repo "https://github.com/&owner;/inventoryx">
 <!ENTITY pluginURL "https://raw.githubusercontent.com/&owner;/inventoryx/main/&name;.plg">
 <!ENTITY bundle "&name;-&version;.tgz">
-<!ENTITY md5 "3e68a113f1ddae290ca323075a094a56">
+<!ENTITY md5 "7035093a39481503d0995c966dad00cd">
 ]>
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" support="&repo;/issues" icon="pie-chart" min="7.0.0">
 <CHANGES>
-### 2026.11.12a
+### 2026.11.12b
 - First version: scan the array, pools, shares or any folder; treemap, file outline, file kinds, largest files and search.
 - Progress with time remaining; scans run in the background on the server.
 - The last scan is saved and reloaded after a reboot.
